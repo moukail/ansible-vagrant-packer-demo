@@ -1,0 +1,37 @@
+#cloud-config
+autoinstall:
+  version: 1
+  identity:
+    hostname: ubuntu
+    username: vagrant
+    password: $6$h2B1ftx5WriSlrcf$WsxGENeMbJ.cet8MgZF85hweRpvKoTzSop8J5.uhQOr6xFzAQntB79SDZ5G0CFtEz133PPClBnKsOoTLBmShw/
+  user-data:
+    disable_root: false
+  keyboard:
+    layout: us
+  locale: en_US
+  network:
+    ethernets:
+      eth0:
+        dhcp4: true
+        dhcp-identifier: mac
+    version: 2
+  ssh:
+    allow-pw: true
+    install-server: true
+  storage:
+    layout:
+      name: lvm
+  late-commands:
+    #- sed -i -e 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config
+    #- sed -i -e 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' /target/etc/ssh/sshd_config
+    - sed -i 's/^GSSAPIAuthentication yes/GSSAPIAuthentication no/' /etc/ssh/sshd_config
+    - sed -i 's/^#UseDNS.*/UseDNS no/' /etc/ssh/sshd_config
+    - sed -i 's/^#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+    - echo "ClientAliveInterval 120" >> /etc/ssh/sshd_config
+    - echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/vagrant
+    - sed -ie 's/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="net.ifnames=0 ipv6.disable=1 biosdevname=0"/' /target/etc/default/grub
+    - curtin in-target --target /target update-grub2
+  packages:
+    - linux-headers-generic
+    - openssh-server

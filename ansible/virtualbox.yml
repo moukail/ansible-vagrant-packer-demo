@@ -1,0 +1,35 @@
+---
+- name: Install dependencies for VirtualBox Guest Additions (Rocky)
+  ansible.builtin.dnf:
+    name:
+    - bzip2
+    #- dkms
+    - kernel-devel
+    - kernel-headers
+    - gcc
+    - make
+    - perl
+    state: latest
+  when:
+    - ansible_distribution == "Rocky"
+
+- name: Mount VBoxGuestAdditions.iso
+  ansible.posix.mount:
+    path: /mnt
+    src: /home/vagrant/VBoxGuestAdditions.iso
+    fstype: iso9660
+    opts: ro,loop
+    state: mounted
+
+- name: Install VBoxGuestAdditions.iso
+  ansible.builtin.command: sh /mnt/VBoxLinuxAdditions.run
+
+- name: Umount VBoxGuestAdditions.iso
+  ansible.posix.mount:
+    path: /mnt
+    state: absent
+
+- name: Delete VBoxGuestAdditions.iso
+  ansible.builtin.file:
+    path: /home/vagrant/VBoxGuestAdditions.iso
+    state: absent

@@ -1,0 +1,34 @@
+---
+- name: Base system configuration
+  hosts: default
+  become: true
+
+  tasks:
+    - name: Ensure system is up to date
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+      when: ansible_facts['os_family'] | lower == "redhat"
+
+    - name: Ensure system is up to date
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: dist
+      when: ansible_facts['os_family'] | lower == "debian"
+
+    - name: Install common packages
+      ansible.builtin.package:
+        name:
+          - gcc
+          - make
+          - perl
+          - bzip2
+          - tar
+          - curl
+          - wget
+          - net-tools
+        state: present
+
+    #- nme: virtualbox guest additions setup
+    #  ansible.builtin.import_tasks: virtualbox.yml
+    #  when: ansible_virtualization_type == "virtualbox"

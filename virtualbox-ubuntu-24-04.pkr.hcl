@@ -36,7 +36,7 @@ build {
   }
 
   provisioner "shell" {
-    script = "scripts/vagrant.sh"
+    script = "scripts/virtualbox.sh"
     #expect_disconnect = true
   }
 

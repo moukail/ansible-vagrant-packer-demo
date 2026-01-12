@@ -1,17 +1,63 @@
 Install Packer
 =======
 ```bash
-# For debian
+## For Debian/Ubuntu
 wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 sudo apt update && sudo apt install packer
 
-# For Red hat 
+## For RHEL/CentOS
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 sudo yum -y install packer
 
 packer version
+```
+
+Install Ansible
+=======
+```bash
+## using pip
+sudo apt install python3-pip
+pip install ansible
+
+## using pipx
+sudo apt install pipx sshpass
+pipx install ansible-core==2.20
+pipx install --include-deps ansible --force
+pipx ensurepath
+pipx inject ansible requests
+pipx upgrade --include-injected ansible
+ansible --version
+```
+
+Install QEMU
+======
+```bash
+## For Debian/Ubuntu
+sudo apt-get install qemu-system
+
+## For RHEL/CentOS
+sudo yum install qemu-kvm
+```
+
+Install VirtualBox
+======
+```bash
+## For Ubuntu
+sudo apt install make gcc liblzf1 libtpms0 libxcb-cursor0
+
+wget https://download.virtualbox.org/virtualbox/7.2.4/virtualbox-7.2_7.2.4-170995~Ubuntu~noble_amd64.deb
+sudo dpkg -i virtualbox-7.2_7.2.4-170995~Ubuntu~noble_amd64.deb
+sudo /sbin/vboxconfig
+
+## For RHEL/CentOS
+wget https://download.virtualbox.org/virtualbox/7.2.4/VirtualBox-7.2-7.2.4_170995_el10-1.x86_64.rpm
+
+##
+VBoxManage --version
+sudo modprobe -r kvm_intel kvm
+
 ```
 
 ### packer plugins

@@ -1,3 +1,6 @@
 .ansible
 .vagrant
 boxes/
+.env
+hcp.pkrvars.hcl
+packer_cache/

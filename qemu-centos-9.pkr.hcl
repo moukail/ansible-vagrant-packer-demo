@@ -1,3 +1,13 @@
+variable "hcp_client_id" {
+  type    = string
+  default = "${env("HCP_CLIENT_ID")}"
+}
+
+variable "hcp_client_secret" {
+  type    = string
+  default = "${env("HCP_CLIENT_SECRET")}"
+}
+
 source "qemu" "centos-9" {
   vm_name       = "packer-centos-9"
   accelerator   = "kvm"
@@ -10,7 +20,6 @@ source "qemu" "centos-9" {
   disk_cache = "none"
   disk_compression = true
 
-  qemu_binary   = "/usr/libexec/qemu-kvm"
   qemuargs = [
     ["-m", "2048M"], ["-smp", "2"], ["-cpu", "host"],
   ]
@@ -46,7 +55,18 @@ build {
     ]
   }
   
-  post-processor "vagrant" {
-    output = "./boxes/centos-stream9-libvirt.box"
+  post-processors {
+    post-processor "vagrant" {
+      output = "./boxes/centos-stream9-libvirt.box"
+    }
+
+    post-processor "vagrant-registry" {
+      box_tag = "imoukafih/centos9s"
+      version = "1.0.0"
+      client_id     = "${var.hcp_client_id}"
+      client_secret = "${var.hcp_client_secret}"
+      
+      architecture = "amd64"
+    }
   }
 }

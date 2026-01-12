@@ -1,3 +1,11 @@
+variable "hcp_client_id" {
+  type    = string
+}
+
+variable "hcp_client_secret" {
+  type    = string
+}
+
 source "virtualbox-iso" "almalinux-9" {
   vm_name       = "packer-almalinux-9"
   guest_os_type = "RedHat10_64"
@@ -5,7 +13,7 @@ source "virtualbox-iso" "almalinux-9" {
   headless      = true
 
   iso_url      = "https://repo.almalinux.org/almalinux/9/isos/x86_64/AlmaLinux-9.7-x86_64-boot.iso"
-  iso_checksum = "sha256:494d09f608b325ef42899b5ce38ba1b17755a639f5558b9b98a031b0696e694a"
+  iso_checksum = "file:https://repo.almalinux.org/almalinux/9/isos/x86_64/CHECKSUM"
 
   http_directory = "./http"
   boot_wait      = "1s"
@@ -41,10 +49,20 @@ build {
 
   provisioner "shell" {
     script = "scripts/virtualbox.sh"
-    #expect_disconnect = true
   }
 
-  post-processor "vagrant" {
-    output = "./boxes/almalinux-9.box"
+  post-processors {
+    post-processor "vagrant" {
+      output = "./boxes/almalinux9-virtualbox.box"
+    }
+
+    post-processor "vagrant-registry" {
+      box_tag = "imoukafih/almalinux9"
+      version = "1.0.0"
+      client_id     = "${var.hcp_client_id}"
+      client_secret = "${var.hcp_client_secret}"
+      
+      architecture = "amd64"
+    }
   }
 }

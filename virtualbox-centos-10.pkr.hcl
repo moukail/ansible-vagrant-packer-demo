@@ -1,11 +1,21 @@
+variable "hcp_client_id" {
+  type    = string
+  default = "${env("HCP_CLIENT_ID")}"
+}
+
+variable "hcp_client_secret" {
+  type    = string
+  default = "${env("HCP_CLIENT_SECRET")}"
+}
+
 source "virtualbox-iso" "centos-10" {
   vm_name       = "packer-centos-10"
   guest_os_type = "RedHat10_64"
   firmware      = "efi"
   headless      = true
 
-  iso_url      = "https://mirror.i3d.net/pub/centos-stream/10-stream/BaseOS/x86_64/iso/CentOS-Stream-10-latest-x86_64-boot.iso"
-  iso_checksum = "sha256:66ac4bfca2b5d45a634dcdd0b02d3ae3df01cd5fb4ddd96e4234053590d82cfc"
+  iso_url      = "https://mirror.stream.centos.org/10-stream/BaseOS/x86_64/iso/CentOS-Stream-10-latest-x86_64-boot.iso"
+  iso_checksum = "file:https://mirror.stream.centos.org/10-stream/BaseOS/x86_64/iso/CentOS-Stream-10-latest-x86_64-boot.iso.SHA256SUM"
 
   http_directory = "./http"
   boot_wait      = "1s"
@@ -41,10 +51,20 @@ build {
 
   provisioner "shell" {
     script = "scripts/virtualbox.sh"
-    #expect_disconnect = true
   }
 
-  post-processor "vagrant" {
-    output = "./boxes/centos-10.box"
+  post-processors {
+    post-processor "vagrant" {
+      output = "./boxes/centos-stream10-virtualbox.box"
+    }
+
+    post-processor "vagrant-registry" {
+      box_tag = "imoukafih/centos10s"
+      version = "1.0.0"
+      client_id     = "${var.hcp_client_id}"
+      client_secret = "${var.hcp_client_secret}"
+      
+      architecture = "amd64"
+    }
   }
 }

@@ -1,11 +1,21 @@
+variable "hcp_client_id" {
+  type    = string
+  default = "${env("HCP_CLIENT_ID")}"
+}
+
+variable "hcp_client_secret" {
+  type    = string
+  default = "${env("HCP_CLIENT_SECRET")}"
+}
+
 source "virtualbox-iso" "centos-9" {
   vm_name       = "packer-centos-9"
   guest_os_type = "RedHat9_64"
   firmware      = "efi"
   headless      = true
 
-  iso_url      = "https://mirror.i3d.net/pub/centos-stream/9-stream/BaseOS/x86_64/iso/CentOS-Stream-9-latest-x86_64-boot.iso"
-  iso_checksum = "sha256:4262145325c4320bae40c07f083ef944761a68d25fe8c1a42b322498daac195d"
+  iso_url      = "https://mirror.stream.centos.org/9-stream/BaseOS/x86_64/iso/CentOS-Stream-9-latest-x86_64-boot.iso"
+  iso_checksum = "file:https://mirror.stream.centos.org/9-stream/BaseOS/x86_64/iso/CentOS-Stream-9-latest-x86_64-boot.iso.SHA256SUM"
 
   http_directory = "./http"
   boot_wait      = "1s"
@@ -41,10 +51,20 @@ build {
 
   provisioner "shell" {
     script = "scripts/virtualbox.sh"
-    #expect_disconnect = true
   }
-  
-  post-processor "vagrant" {
-    output = "./boxes/centos-9.box"
+
+  post-processors {
+    post-processor "vagrant" {
+      output = "./boxes/centos-stream9-virtualbox.box"
+    }
+
+    post-processor "vagrant-registry" {
+      box_tag = "imoukafih/centos9s"
+      version = "1.0.0"
+      client_id     = "${var.hcp_client_id}"
+      client_secret = "${var.hcp_client_secret}"
+      
+      architecture = "amd64"
+    }
   }
 }

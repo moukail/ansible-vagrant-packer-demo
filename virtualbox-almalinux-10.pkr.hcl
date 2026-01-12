@@ -1,3 +1,11 @@
+variable "hcp_client_id" {
+  type    = string
+}
+
+variable "hcp_client_secret" {
+  type    = string
+}
+
 source "virtualbox-iso" "almalinux-10" {
   vm_name       = "packer-almalinux-10"
   guest_os_type = "RedHat10_64"
@@ -5,7 +13,7 @@ source "virtualbox-iso" "almalinux-10" {
   headless      = true
 
   iso_url      = "https://repo.almalinux.org/almalinux/10/isos/x86_64/AlmaLinux-10.1-x86_64-boot.iso"
-  iso_checksum = "sha256:68a9e14fa252c817d11a3c80306e5a21b2db37c21173fd3f52a9eb6ced25a4a0"
+  iso_checksum = "file:https://repo.almalinux.org/almalinux/10/isos/x86_64/CHECKSUM"
 
   http_directory = "./http"
   boot_wait      = "1s"
@@ -41,10 +49,21 @@ build {
 
   provisioner "shell" {
     script = "scripts/virtualbox.sh"
-    #expect_disconnect = true
+    expect_disconnect = true
   }
   
-  post-processor "vagrant" {
-    output = "./boxes/almalinux-10.box"
+  post-processors {
+    post-processor "vagrant" {
+      output = "./boxes/almalinux10-virtualbox.box"
+    }
+
+    post-processor "vagrant-registry" {
+      box_tag = "imoukafih/almalinux10"
+      version = "1.0.0"
+      client_id     = "${var.hcp_client_id}"
+      client_secret = "${var.hcp_client_secret}"
+      
+      architecture = "amd64"
+    }
   }
 }

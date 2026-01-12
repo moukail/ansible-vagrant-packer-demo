@@ -1,3 +1,11 @@
+variable "hcp_client_id" {
+  type    = string
+}
+
+variable "hcp_client_secret" {
+  type    = string
+}
+
 source "virtualbox-iso" "rockylinux-10" {
   vm_name       = "packer-rockylinux-10"
   guest_os_type = "RedHat10_64"
@@ -5,7 +13,7 @@ source "virtualbox-iso" "rockylinux-10" {
   headless      = true
 
   iso_url      = "https://download.rockylinux.org/pub/rocky/10/isos/x86_64/Rocky-10.1-x86_64-boot.iso"
-  iso_checksum = "sha256:18543988d9a1a5632d142c3dc288136dcc48ab71628f92ebcd40ada7f4ecd110"
+  iso_checksum = "file:https://download.rockylinux.org/pub/rocky/10/isos/x86_64/Rocky-10.1-x86_64-boot.iso.CHECKSUM"
 
   http_directory = "./http"
   boot_wait      = "1s"
@@ -41,10 +49,20 @@ build {
 
   provisioner "shell" {
     script = "scripts/virtualbox.sh"
-    #expect_disconnect = true
   }
 
-  post-processor "vagrant" {
-    output = "./boxes/rockylinux-10.box"
+  post-processors {
+    post-processor "vagrant" {
+      output = "./boxes/rockylinux10-virtualbox.box"
+    }
+
+    post-processor "vagrant-registry" {
+      box_tag = "imoukafih/rockylinux10"
+      version = "1.0.0"
+      client_id     = "${var.hcp_client_id}"
+      client_secret = "${var.hcp_client_secret}"
+      
+      architecture = "amd64"
+    }
   }
 }

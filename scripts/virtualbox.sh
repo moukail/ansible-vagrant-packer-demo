@@ -7,5 +7,3 @@ sudo sh /media/VBoxGuestAdditions/VBoxLinuxAdditions.run || true
 sudo umount /media/VBoxGuestAdditions
 sudo rm -rf /media/VBoxGuestAdditions
 sudo rm -f /home/vagrant/VBoxGuestAdditions.iso
-
-sudo systemctl reboot

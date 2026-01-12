@@ -1,14 +1,19 @@
+variable "hcp_client_id" {
+  type    = string
+}
+
+variable "hcp_client_secret" {
+  type    = string
+}
+
 source "virtualbox-iso" "rockylinux-9" {
   vm_name       = "packer-rockylinux-9"
   guest_os_type = "RedHat9_64"
   firmware      = "efi"
   headless      = true
 
-  #iso_url      = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.7-x86_64-boot.iso"
-  #iso_checksum = "sha256:3b5c87b2f9e62fdf0235d424d64c677906096965aad8a580e0e98fcb9f97f267"
-
-  iso_url      = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.7-x86_64-minimal.iso"
-  iso_checksum = "sha256:23a1ac1175d8ccada7195863914ef1237f584ff25f73bd53da410d5fffd882b0"
+  iso_url      = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.7-x86_64-boot.iso"
+  iso_checksum = "file:https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.7-x86_64-boot.iso.CHECKSUM"
 
   http_directory = "./http"
   boot_wait      = "1s"
@@ -44,10 +49,20 @@ build {
 
   provisioner "shell" {
     script = "scripts/virtualbox.sh"
-    #expect_disconnect = true
   }
 
-  post-processor "vagrant" {
-    output = "./boxes/rockylinux-9.box"
+  post-processors {
+    post-processor "vagrant" {
+      output = "./boxes/rockylinux9-virtualbox.box"
+    }
+
+    post-processor "vagrant-registry" {
+      box_tag = "imoukafih/rockylinux9"
+      version = "1.0.0"
+      client_id     = "${var.hcp_client_id}"
+      client_secret = "${var.hcp_client_secret}"
+      
+      architecture = "amd64"
+    }
   }
 }

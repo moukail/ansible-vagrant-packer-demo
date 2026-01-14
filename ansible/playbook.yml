@@ -16,15 +16,15 @@
         upgrade: dist
       when: ansible_facts['os_family'] | lower == "debian"
 
-    - name: include openssl role
-      ansible.builtin.include_role:
-        name: ansible-role-openssl
-      vars:
-        openssl_version: "3.5.4"
-
     - name: include openssh role
       ansible.builtin.include_role:
         name: ansible-role-openssh
+      vars:
+        openssl_version: "3.5.4"
+
+    - name: include python role
+      ansible.builtin.include_role:
+        name: ansible-role-python
 
     - name: virtualbox guest additions setup
       ansible.builtin.include_tasks: virtualbox.yml

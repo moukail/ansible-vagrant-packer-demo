@@ -109,13 +109,15 @@ packer build -only=qemu.rockylinux10_vagrant_libvirt_x86_64 -var-file=hcp.pkrvar
 
 ### Vagrant
 ```bash
-vagrant box add --name almalinux9 ./boxes/almalinux9-virtualbox.box --force
+vagrant box add --name almalinux9 ./boxes/almaLinux9-vagrant-libvirt.box --force
 
 vagrant init almalinux9
 
 vagrant destroy -f
 vagrant up --provision --provider=virtualbox
 vagrant ssh-config
+
+vagrant box remove almalinux9
 ```
 
 ### Autoinstall

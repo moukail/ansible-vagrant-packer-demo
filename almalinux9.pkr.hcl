@@ -18,8 +18,8 @@ variable "hcp_client_secret" {
   default = "${env("HCP_CLIENT_SECRET")}"
 }
 
-source "qemu" "almalinux9_vagrant_libvirt_x86_64" {
-  vm_name       = "packer_almalinux9_vagrant_libvirt_x86_64"
+source "qemu" "almalinux9_vagrant_x86_64" {
+  vm_name       = "packer_almalinux9_vagrant_x86_64"
   accelerator   = "kvm"
   format        = "qcow2"
   headless      = true
@@ -52,8 +52,8 @@ source "qemu" "almalinux9_vagrant_libvirt_x86_64" {
   shutdown_command = "echo 'vagrant' | sudo -S shutdown -P now"
 }
 
-source "virtualbox-iso" "almalinux9_vagrant_virtualbox_x86_64" {
-  vm_name       = "packer_almalinux9_vagrant_virtualbox_x86_64"
+source "virtualbox-iso" "almalinux9_vagrant_x86_64" {
+  vm_name       = "packer_almalinux9_vagrant_x86_64"
   guest_os_type = "RedHat_64"
   firmware      = "efi"
   headless      = true
@@ -83,8 +83,8 @@ source "virtualbox-iso" "almalinux9_vagrant_virtualbox_x86_64" {
 
 build {
   sources = [
-    "qemu.almalinux9_vagrant_libvirt_x86_64",
-    "virtualbox-iso.almalinux9_vagrant_virtualbox_x86_64"
+    "qemu.almalinux9_vagrant_x86_64",
+    "virtualbox-iso.almalinux9_vagrant_x86_64"
   ]
 
   #provisioner "shell" {

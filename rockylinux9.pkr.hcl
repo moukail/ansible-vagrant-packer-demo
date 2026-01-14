@@ -1,12 +1,13 @@
 variable "iso_url" {
   type    = string
-  default = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.7-x86_64-boot.iso"
+  default = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9-latest-x86_64-boot.iso"
 }
 
 variable "iso_checksum" {
   type    = string
-  default = "file:https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.7-x86_64-boot.iso.CHECKSUM"
+  default = "file:https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9-latest-x86_64-boot.iso.CHECKSUM"
 }
+
 
 variable "hcp_client_id" {
   type    = string
@@ -18,8 +19,8 @@ variable "hcp_client_secret" {
   default = "${env("HCP_CLIENT_SECRET")}"
 }
 
-source "qemu" "rockylinux9_vagrant_libvirt_x86_64" {
-  vm_name       = "packer_rockylinux9_vagrant_libvirt_x86_64"
+source "qemu" "rockylinux9_vagrant_x86_64" {
+  vm_name       = "packer_rockylinux9_vagrant_x86_64"
   accelerator   = "kvm"
   format        = "qcow2"
   headless      = true
@@ -52,8 +53,8 @@ source "qemu" "rockylinux9_vagrant_libvirt_x86_64" {
   shutdown_command = "echo 'vagrant' | sudo -S shutdown -P now"
 }
 
-source "virtualbox-iso" "rockylinux9_vagrant_virtualbox_x86_64" {
-  vm_name       = "packer_rockylinux9_vagrant_virtualbox_x86_64"
+source "virtualbox-iso" "rockylinux9_vagrant_x86_64" {
+  vm_name       = "packer_rockylinux9_vagrant_x86_64"
   guest_os_type = "RedHat_64"
   firmware      = "efi"
   headless      = true
@@ -83,8 +84,8 @@ source "virtualbox-iso" "rockylinux9_vagrant_virtualbox_x86_64" {
 
 build {
   sources = [
-    "qemu.rockylinux9_vagrant_libvirt_x86_64",
-    "virtualbox-iso.rockylinux9_vagrant_virtualbox_x86_64"
+    "qemu.rockylinux9_vagrant_x86_64",
+    "virtualbox-iso.rockylinux9_vagrant_x86_64"
   ]
 
   #provisioner "shell" {

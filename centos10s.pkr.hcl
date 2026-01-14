@@ -18,8 +18,8 @@ variable "hcp_client_secret" {
   default = "${env("HCP_CLIENT_SECRET")}"
 }
 
-source "qemu" "centos10s_vagrant_libvirt_x86_64" {
-  vm_name       = "packer_centos10s_vagrant_libvirt_x86_64"
+source "qemu" "centos10s_vagrant_x86_64" {
+  vm_name       = "packer_centos10s_vagrant_x86_64"
   accelerator   = "kvm"
   format        = "qcow2"
   headless      = true
@@ -52,8 +52,8 @@ source "qemu" "centos10s_vagrant_libvirt_x86_64" {
   shutdown_command = "echo 'vagrant' | sudo -S shutdown -P now"
 }
 
-source "virtualbox-iso" "centos10s_vagrant_virtualbox_x86_64" {
-  vm_name       = "packer_centos10s_vagrant_virtualbox_x86_64"
+source "virtualbox-iso" "centos10s_vagrant_x86_64" {
+  vm_name       = "packer_centos10s_vagrant_x86_64"
   guest_os_type = "RedHat_64"
   firmware      = "efi"
   headless      = true
@@ -83,8 +83,8 @@ source "virtualbox-iso" "centos10s_vagrant_virtualbox_x86_64" {
 
 build {
   sources = [
-    "qemu.centos10s_vagrant_libvirt_x86_64",
-    "virtualbox-iso.centos10s_vagrant_virtualbox_x86_64"
+    "qemu.centos10s_vagrant_x86_64",
+    "virtualbox-iso.centos10s_vagrant_x86_64"
   ]
 
   #provisioner "shell" {

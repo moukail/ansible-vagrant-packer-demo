@@ -98,18 +98,18 @@ chmod +x scripts/vagrant.sh
 ```bash
 packer init .
 
-packer build -only=qemu.almalinux9_vagrant_libvirt_x86_64 -var-file=hcp.pkrvars.hcl ./almalinux9.pkr.hcl
-packer build -only=qemu.almalinux10_vagrant_libvirt_x86_64 -var-file=hcp.pkrvars.hcl ./almalinux10.pkr.hcl
-packer build -only=qemu.centos9s_vagrant_libvirt_x86_64 -var-file=hcp.pkrvars.hcl ./centos9s.pkr.hcl
-packer build -only=qemu.centos10s_vagrant_libvirt_x86_64 -var-file=hcp.pkrvars.hcl ./centos10s.pkr.hcl
-packer build -only=qemu.rockylinux9_vagrant_libvirt_x86_64 -var-file=hcp.pkrvars.hcl ./rockylinux9.pkr.hcl
-packer build -only=qemu.rockylinux10_vagrant_libvirt_x86_64 -var-file=hcp.pkrvars.hcl ./rockylinux10.pkr.hcl
+packer build -only=virtualbox-iso.almalinux9_vagrant_x86_64 -var-file=hcp.pkrvars.hcl ./almalinux9.pkr.hcl
+packer build -only=virtualbox-iso.almalinux10_vagrant_x86_64 -var-file=hcp.pkrvars.hcl ./almalinux10.pkr.hcl
+packer build -only=virtualbox-iso.centos9s_vagrant_x86_64 -var-file=hcp.pkrvars.hcl ./centos9s.pkr.hcl
+packer build -only=virtualbox-iso.centos10s_vagrant_x86_64 -var-file=hcp.pkrvars.hcl ./centos10s.pkr.hcl
+packer build -only=virtualbox-iso.rockylinux9_vagrant_x86_64 -var-file=hcp.pkrvars.hcl ./rockylinux9.pkr.hcl
+packer build -only=virtualbox-iso.rockylinux10_vagrant_x86_64 -var-file=hcp.pkrvars.hcl ./rockylinux10.pkr.hcl
 
 ```
 
 ### Vagrant
 ```bash
-vagrant box add --name almalinux9 ./boxes/almaLinux9-vagrant-libvirt.box --force
+vagrant box add --name centos9s ./boxes/centos9s-vagrant-libvirt.box --force
 
 vagrant init almalinux9
 

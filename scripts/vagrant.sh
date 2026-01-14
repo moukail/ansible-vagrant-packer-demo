@@ -13,22 +13,6 @@ set -eux
 # Optimize DNF
 #echo "max_parallel_downloads=10" | sudo tee -a /etc/dnf/dnf.conf
 
-#sudo dnf install -y \
-#  kernel-devel-$(uname -r) \
-#  kernel-headers-$(uname -r) \
-#  gcc \
-#  make \
-#  perl \
-#  bzip2 tar wget \
-#  elfutils-libelf-devel
-
-#sudo mkdir -p /media/VBoxGuestAdditions
-#sudo mount /home/vagrant/VBoxGuestAdditions.iso /media/VBoxGuestAdditions
-#sudo sh /media/VBoxGuestAdditions/VBoxLinuxAdditions.run || true
-#sudo umount /media/VBoxGuestAdditions
-#sudo rm -rf /media/VBoxGuestAdditions
-#sudo rm -f /home/vagrant/VBoxGuestAdditions.iso
-
 #sudo systemctl reboot
 
 ip addr show

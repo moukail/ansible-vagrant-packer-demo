@@ -1,17 +1,17 @@
 ---
-- name: Install dependencies for VirtualBox Guest Additions (Rocky)
+- name: Install common packages
+  ansible.builtin.package:
+    name:
+      - bzip2
+      - kernel-headers
+    state: present
+
+- name: Install dependencies for VirtualBox Guest Additions (RedHat-family)
   ansible.builtin.dnf:
     name:
-    - bzip2
-    #- dkms
-    - kernel-devel
-    - kernel-headers
-    - gcc
-    - make
-    - perl
+      - kernel-devel
     state: latest
-  when:
-    - ansible_distribution == "Rocky"
+  when: ansible_facts['os_family'] | lower == "redhat"
 
 - name: Mount VBoxGuestAdditions.iso
   ansible.posix.mount:

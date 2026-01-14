@@ -16,19 +16,16 @@
         upgrade: dist
       when: ansible_facts['os_family'] | lower == "debian"
 
-    - name: Install common packages
-      ansible.builtin.package:
-        name:
-          - gcc
-          - make
-          - perl
-          - bzip2
-          - tar
-          - curl
-          - wget
-          - net-tools
-        state: present
+    - name: include openssl role
+      ansible.builtin.include_role:
+        name: ansible-role-openssl
+      vars:
+        openssl_version: "3.5.4"
 
-    #- nme: virtualbox guest additions setup
-    #  ansible.builtin.import_tasks: virtualbox.yml
-    #  when: ansible_virtualization_type == "virtualbox"
+    - name: include openssh role
+      ansible.builtin.include_role:
+        name: ansible-role-openssh
+
+    - name: virtualbox guest additions setup
+      ansible.builtin.include_tasks: virtualbox.yml
+      when: ansible_facts['virtualization_type'] == "virtualbox"

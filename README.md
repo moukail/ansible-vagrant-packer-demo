@@ -14,7 +14,7 @@ sudo yum -y install packer
 packer version
 ```
 
-Install Vagrant 
+Install Vagrant
 =======
 ```bash
 ## For Debian/Ubuntu
@@ -71,6 +71,12 @@ sudo apt install make gcc liblzf1 libtpms0 libxcb-cursor0
 wget https://download.virtualbox.org/virtualbox/7.2.4/virtualbox-7.2_7.2.4-170995~Ubuntu~noble_amd64.deb
 sudo dpkg -i virtualbox-7.2_7.2.4-170995~Ubuntu~noble_amd64.deb
 sudo /sbin/vboxconfig
+
+## To build centos vagrant box you need virtualbox-7.1
+sudo apt install libqt6core6t64 libqt6dbus6t64 libqt6gui6t64 libqt6help6 libqt6printsupport6t64 libqt6statemachine6 libqt6widgets6t64 libqt6xml6t64
+
+wget https://download.virtualbox.org/virtualbox/7.1.14/virtualbox-7.1_7.1.14-170994~Ubuntu~noble_amd64.deb
+sudo dpkg -i virtualbox-7.1_7.1.14-170994~Ubuntu~noble_amd64.deb
 
 ## For RHEL/CentOS
 wget https://download.virtualbox.org/virtualbox/7.2.4/VirtualBox-7.2-7.2.4_170995_el10-1.x86_64.rpm
@@ -144,4 +150,13 @@ qemu-img create -f qcow2 disk.qcow2 20G
   -drive file=disk.qcow2,format=qcow2 \
   -cdrom ~/Downloads/CentOS-Stream-9-latest-x86_64-boot.iso -boot d \
   -display none -vnc 127.0.0.1:0
+
+
+wget https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-Vagrant-9-latest.x86_64.vagrant-virtualbox.box
+vagrant box add --name centos9s ./CentOS-Stream-Vagrant-9-latest.x86_64.vagrant-virtualbox.box --force
+
+wget https://cloud.centos.org/centos/10-stream/x86_64/images/CentOS-Stream-Vagrant-10-latest.x86_64.vagrant-virtualbox.box
+vagrant box add --name centos10s ./CentOS-Stream-Vagrant-10-latest.x86_64.vagrant-virtualbox.box --force
+
+wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20260114T140056Z/install-amd64-minimal-20260114T140056Z.iso
 ```

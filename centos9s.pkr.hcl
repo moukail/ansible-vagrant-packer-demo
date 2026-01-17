@@ -39,6 +39,7 @@ source "qemu" "centos9s_vagrant_x86_64" {
   http_directory = "./http"
   boot_wait      = "5s"
 
+  # for msdos
   boot_command = [
     "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
     "inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos9s_ks.cfg",

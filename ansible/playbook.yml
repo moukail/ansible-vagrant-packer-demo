@@ -16,6 +16,12 @@
         upgrade: dist
       when: ansible_facts['os_family'] | lower == "debian"
 
+    - name: virtualbox guest additions setup
+      ansible.builtin.include_tasks: virtualbox.yml
+      when: 
+        - ansible_facts['virtualization_type'] == "virtualbox"
+        - ansible_facts['distribution'] | lower != "centos"
+
     - name: include openssh role
       ansible.builtin.include_role:
         name: ansible-role-openssh
@@ -25,7 +31,3 @@
     - name: include python role
       ansible.builtin.include_role:
         name: ansible-role-python
-
-    - name: virtualbox guest additions setup
-      ansible.builtin.include_tasks: virtualbox.yml
-      when: ansible_facts['virtualization_type'] == "virtualbox"

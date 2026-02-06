@@ -14,38 +14,6 @@ sudo yum -y install packer
 packer version
 ```
 
-Install Vagrant
-=======
-```bash
-## For Debian/Ubuntu
-wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-
-sudo apt update && sudo apt install vagrant
-
-vagrant plugin install vagrant-libvirt
-vagrant plugin install vagrant-vbguest
-vagrant reload
-```
-
-Install Ansible
-=======
-```bash
-## using pip
-sudo apt install python3-pip
-pip install ansible
-
-## using pipx
-sudo apt install pipx sshpass
-pipx install ansible-core==2.20
-pipx install --include-deps ansible --force
-pipx ensurepath
-pipx inject ansible requests
-pipx upgrade --include-injected ansible
-ansible --version
-```
-
 Install QEMU
 ======
 ```bash
@@ -80,6 +48,7 @@ sudo dpkg -i virtualbox-7.1_7.1.14-170994~Ubuntu~noble_amd64.deb
 
 ## For RHEL/CentOS
 wget https://download.virtualbox.org/virtualbox/7.2.4/VirtualBox-7.2-7.2.4_170995_el10-1.x86_64.rpm
+sudo dnf install VirtualBox-7.2-7.2.4_170995_el10-1.x86_64.rpm
 
 ##
 VBoxManage --version
@@ -87,6 +56,54 @@ VBoxManage --version
 ## Error fix: Stderr: VBoxManage: error: VT-x is being used by another hypervisor (VERR_VMX_IN_VMX_ROOT_MODE).
 sudo modprobe -r kvm_intel kvm
 
+## Error fix: Stderr: /sbin/vboxconfig: error: The VirtualBox kernel module is not loaded.
+sudo dnf install -y gcc make perl kernel-devel-$(uname -r)
+sudo /sbin/vboxconfig
+```
+
+Install Vagrant
+=======
+```bash
+## For Debian/Ubuntu
+wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+sudo apt update && sudo apt install vagrant
+
+## For RHEL/CentOS
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+sudo yum -y install vagrant
+
+vagrant plugin install vagrant-libvirt
+vagrant plugin install vagrant-vbguest
+vagrant reload
+```
+
+Install Ansible
+=======
+```bash
+## using pip
+sudo apt install python3-pip
+pip install ansible
+
+## using pipx
+### For Debian/Ubuntu
+sudo apt install pipx sshpass
+
+### For RHEL/CentOS
+sudo dnf install python3-pip
+python3 -m pip install --user pipx
+
+### For both Debian/Ubuntu and RHEL/CentOS
+pipx install ansible-core==2.20
+pipx install --include-deps ansible --force
+pipx ensurepath
+pipx inject ansible requests
+pipx upgrade --include-injected ansible
+
+ansible --version
 ```
 
 ### packer plugins

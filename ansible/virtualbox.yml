@@ -3,13 +3,18 @@
   ansible.builtin.package:
     name:
       - bzip2
-      - kernel-headers
+      - gcc
+      - make
+      - perl
+      - curl
+      - wget
     state: present
 
 - name: Install dependencies for VirtualBox Guest Additions (RedHat-family)
   ansible.builtin.dnf:
     name:
       - kernel-devel
+      - kernel-headers
     state: latest
   when: ansible_facts['os_family'] | lower == "redhat"
 

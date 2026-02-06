@@ -21,6 +21,7 @@
       when: 
         - ansible_facts['virtualization_type'] == "virtualbox"
         - ansible_facts['distribution'] | lower != "centos"
+        #- ansible_facts['distribution'] | lower != "ubuntu"
 
     - name: include openssh role
       ansible.builtin.include_role:

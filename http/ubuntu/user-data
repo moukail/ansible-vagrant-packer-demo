@@ -35,3 +35,4 @@ autoinstall:
   packages:
     - linux-headers-generic
     - openssh-server
+
